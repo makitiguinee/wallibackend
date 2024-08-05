@@ -1,0 +1,198 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Permission {
+  READ
+  WRITE
+  DELETE
+  UPDATE
+}
+
+enum TypePiece {
+  PASSPORT
+  CARTE_ELECTEUR
+  CARTE_IDENTITE
+}
+
+enum TypeActivity {
+  MOTO_TAXI
+  VOITURE_TAXI
+  MOTO_PERSONNELLE
+  VOITURE_PERSONNELLE
+}
+
+enum Periode {
+  MENSUEL
+  TRIMESTRIEL
+  SEMESTRIEL
+  ANNUEL
+}
+
+enum TypeProduit {
+  VENTE
+  LOCATION
+}
+
+model User {
+  userId        Int            @id @default(autoincrement())
+  firstname     String         @db.VarChar(80)
+  lastname      String         @db.VarChar(80)
+  username      String         @db.VarChar(80)
+  sexe          String         @db.VarChar(15)
+  email         String         @unique @db.VarChar(80)
+  password      String         @db.VarChar(80)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  isDelete      Boolean        @default(false)
+  proprietaires Proprietaire[]
+  userRoles     UserRole[]
+}
+
+model Role {
+  roleId          Int        @id @default(autoincrement())
+  nameRole        String     @db.VarChar(80)
+  descriptionRole String     @db.VarChar(180)
+  permissions     Permission
+  userRoles       UserRole[]
+}
+
+model UserRole {
+  userRoleId Int  @id @default(autoincrement())
+  userId     Int
+  roleId     Int
+  user       User @relation(fields: [userId], references: [userId])
+  role       Role @relation(fields: [roleId], references: [roleId])
+
+  @@unique([userId, roleId])
+}
+
+model Proprietaire {
+  proprietaireId Int       @id @default(autoincrement())
+  city           String    @db.VarChar(80)
+  phone          String    @db.VarChar(80)
+  nationality    String    @db.VarChar(80)
+  dateOfBirth    DateTime
+  typePice       TypePiece
+  pieceNumber    String    @db.VarChar(180)
+  userId         Int
+  user           User      @relation(fields: [userId], references: [userId])
+  engins         Engin[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Engin {
+  enginId            Int          @id @default(autoincrement())
+  immatricule        String       @db.VarChar(80)
+  marque             String       @db.VarChar(80)
+  model              String       @db.VarChar(80)
+  typeActivity       TypeActivity
+  dateService        DateTime
+  numeroCarteVerte   String       @db.VarChar(80)
+  existAssurance     Boolean
+  dateEpireAssurance DateTime
+
+  existCarteGris     Boolean
+  dateEpireCarteGris DateTime
+
+  existVignette     Boolean
+  dateEpireVignette DateTime
+
+  proprietaireId Int
+  proprietaire   Proprietaire @relation(fields: [proprietaireId], references: [proprietaireId])
+
+  enginTaxes EnginTaxe[]
+
+  destinationId Int
+  destination   Destination @relation(fields: [destinationId], references: [destinationId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Taxe {
+  taxeId         Int     @id @default(autoincrement())
+  montant        Float
+  periode        Periode
+  statutPaiement String  @db.VarChar(80)
+
+  enginTaxes EnginTaxe[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EnginTaxe {
+  enginTaxeId  Int      @id @default(autoincrement())
+  enginId      Int
+  engin        Engin    @relation(fields: [enginId], references: [enginId])
+  taxeId       Int
+  taxe         Taxe     @relation(fields: [taxeId], references: [taxeId])
+  datePaiement DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([enginId, taxeId])
+}
+
+model Boutique {
+  boutiqueId     Int      @id @default(autoincrement())
+  nomBoutique    String   @db.VarChar(80)
+  adresse        String   @db.VarChar(180)
+  phone          String   @db.VarChar(180)
+  existAgreement Boolean
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now())
+}
+
+model Produit {
+  produitId  Int         @id @default(autoincrement())
+  nomProduit String      @db.VarChar(80)
+  photo      String      @db.VarChar(255)
+  prix       Float
+  type       TypeProduit
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model Passager {
+  passagerId    Int         @id @default(autoincrement())
+  nom           String      @db.VarChar(80)
+  prenom        String      @db.VarChar(80)
+  phone         String      @unique @db.VarChar(80)
+  destinationId Int
+  destination   Destination @relation(fields: [destinationId], references: [destinationId])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Gare {
+  gareId       Int           @id @default(autoincrement())
+  nom          String        @db.VarChar(80)
+  city         String        @db.VarChar(180)
+  destinations Destination[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Destination {
+  destinationId    Int        @id @default(autoincrement())
+  villeDepart      String     @db.VarChar(80)
+  villeDestination String     @db.VarChar(80)
+  gareId           Int
+  gare             Gare       @relation(fields: [gareId], references: [gareId])
+  engins           Engin[]
+  passagers        Passager[]
+}

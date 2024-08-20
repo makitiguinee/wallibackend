@@ -45,6 +45,7 @@ enum TypeProduit {
   LOCATION
 }
 
+//endpoint implementer
 model User {
   userId        Int            @id @default(autoincrement())
   firstname     String         @db.VarChar(80)
@@ -58,8 +59,11 @@ model User {
   isDelete      Boolean        @default(false)
   proprietaires Proprietaire[]
   userRoles     UserRole[]
+  syndicat      Syndicat[]
+  boutiques     Boutique[]
 }
 
+//endpoint implementer
 model Role {
   roleId          Int        @id @default(autoincrement())
   nameRole        String     @db.VarChar(80)
@@ -68,6 +72,7 @@ model Role {
   userRoles       UserRole[]
 }
 
+//endpoint implementer
 model UserRole {
   userRoleId Int  @id @default(autoincrement())
   userId     Int
@@ -78,13 +83,15 @@ model UserRole {
   @@unique([userId, roleId])
 }
 
+//endpoint implementer
 model Proprietaire {
   proprietaireId Int       @id @default(autoincrement())
   city           String    @db.VarChar(80)
   phone          String    @db.VarChar(80)
   nationality    String    @db.VarChar(80)
-  dateOfBirth    DateTime
+  dateOfBirth    String    @db.VarChar(80)
   typePice       TypePiece
+  isdeletd       Boolean
   pieceNumber    String    @db.VarChar(180)
   userId         Int
   user           User      @relation(fields: [userId], references: [userId])
@@ -93,22 +100,24 @@ model Proprietaire {
   updatedAt      DateTime  @updatedAt
 }
 
+//endpoint implementer
 model Engin {
   enginId            Int          @id @default(autoincrement())
   immatricule        String       @db.VarChar(80)
   marque             String       @db.VarChar(80)
   model              String       @db.VarChar(80)
   typeActivity       TypeActivity
-  dateService        DateTime
+  dateService        String
   numeroCarteVerte   String       @db.VarChar(80)
   existAssurance     Boolean
-  dateEpireAssurance DateTime
+  dateEpireAssurance String
 
   existCarteGris     Boolean
-  dateEpireCarteGris DateTime
+  dateEpireCarteGris String
 
   existVignette     Boolean
-  dateEpireVignette DateTime
+  dateEpireVignette String
+  isdeleted         Boolean
 
   proprietaireId Int
   proprietaire   Proprietaire @relation(fields: [proprietaireId], references: [proprietaireId])
@@ -118,22 +127,26 @@ model Engin {
   destinationId Int
   destination   Destination @relation(fields: [destinationId], references: [destinationId])
 
+  lineId Int
+  line   Line @relation(fields: [lineId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+//endpoint implementer
 model Taxe {
-  taxeId         Int     @id @default(autoincrement())
+  taxeId         Int         @id @default(autoincrement())
   montant        Float
   periode        Periode
-  statutPaiement String  @db.VarChar(80)
-
-  enginTaxes EnginTaxe[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  statutPaiement String      @db.VarChar(80)
+  isdeleted      Boolean
+  enginTaxes     EnginTaxe[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 }
 
+//endpoint implementer
 model EnginTaxe {
   enginTaxeId  Int      @id @default(autoincrement())
   enginId      Int
@@ -147,52 +160,103 @@ model EnginTaxe {
   @@unique([enginId, taxeId])
 }
 
+//endpoint implementer
 model Boutique {
-  boutiqueId     Int      @id @default(autoincrement())
-  nomBoutique    String   @db.VarChar(80)
-  adresse        String   @db.VarChar(180)
-  phone          String   @db.VarChar(180)
+  boutiqueId     Int       @id @default(autoincrement())
+  nomBoutique    String    @db.VarChar(80)
+  pays           String    @db.VarChar(50)
+  ville          String    @db.VarChar(180)
+  quartier       String    @db.VarChar(180)
+  phone          String    @db.VarChar(180)
   existAgreement Boolean
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @default(now())
+  altitude       Float
+  isdeleted      Boolean
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @default(now())
+  longitude      Float
+  latitude       Float
+  produits       Produit[]
+  userId         Int
+  user           User      @relation(fields: [userId], references: [userId])
 }
 
 model Produit {
-  produitId  Int         @id @default(autoincrement())
-  nomProduit String      @db.VarChar(80)
-  photo      String      @db.VarChar(255)
-  prix       Float
-  type       TypeProduit
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  produitId   Int         @id @default(autoincrement())
+  nomProduit  String      @db.VarChar(80)
+  photo       String      @db.VarChar(255)
+  description String      @db.VarChar(255)
+  intereseted Boolean
+  isdeleted   Boolean
+  prix        Float
+  type        TypeProduit
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  boutiqueId  Int
+  boutique    Boutique    @relation(fields: [boutiqueId], references: [boutiqueId])
 }
 
+//endpoint implementer
 model Passager {
   passagerId    Int         @id @default(autoincrement())
   nom           String      @db.VarChar(80)
   prenom        String      @db.VarChar(80)
   phone         String      @unique @db.VarChar(80)
+  isdeleted     Boolean
   destinationId Int
   destination   Destination @relation(fields: [destinationId], references: [destinationId])
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
 
+//endpoint implementer
 model Gare {
   gareId       Int           @id @default(autoincrement())
   nom          String        @db.VarChar(80)
   city         String        @db.VarChar(180)
+  longitude    String        @db.VarChar(180)
+  altitude     String        @db.VarChar(180)
+  isdeleted    Boolean
+  latitude     String        @db.VarChar(180)
   destinations Destination[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
 
+//endpoint implementer
 model Destination {
   destinationId    Int        @id @default(autoincrement())
   villeDepart      String     @db.VarChar(80)
   villeDestination String     @db.VarChar(80)
   gareId           Int
+  isdeleted        Boolean
   gare             Gare       @relation(fields: [gareId], references: [gareId])
   engins           Engin[]
   passagers        Passager[]
+}
+
+//endpoint implementer
+model Syndicat {
+  id          Int     @id @default(autoincrement())
+  phone       String  @db.VarChar(80)
+  dateOfBirth String  @db.VarChar(80)
+  pays        String  @db.VarChar(80)
+  ville       String  @db.VarChar(80)
+  quartier    String  @db.VarChar(80)
+  lines       Line[]
+  userId      Int
+  isdeleted   Boolean
+  user        User    @relation(fields: [userId], references: [userId])
+}
+
+//endpoint implementer
+model Line {
+  id         Int      @id @default(autoincrement())
+  nomline    String   @db.VarChar(80)
+  longitude  String   @db.VarChar(180)
+  altitude   String   @db.VarChar(180)
+  latitude   String   @db.VarChar(180)
+  isdeleted  Boolean
+  syndicatId Int
+  syndicat   Syndicat @relation(fields: [syndicatId], references: [id])
+  engins     Engin[]
 }

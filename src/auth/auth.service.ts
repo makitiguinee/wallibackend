@@ -41,12 +41,23 @@ export class AuthService {
             isDelete: false,
           },
         });
-        await prisma.userRole.create({
-          data: {
-            userId: newUser.userId,
-            roleId: roleId,
-          },
-        });
+        if (Array.isArray(roleId)) {
+          for (const id of roleId) {
+            await prisma.userRole.create({
+              data: {
+                userId: newUser.userId,
+                roleId: id,
+              },
+            });
+          }
+        } else {
+          await prisma.userRole.create({
+            data: {
+              userId: newUser.userId,
+              roleId: roleId,
+            },
+          });
+        }
 
         return newUser;
       },
@@ -97,6 +108,7 @@ export class AuthService {
         firstname: true,
         lastname: true,
         username: true,
+        userId: true,
         sexe: true,
         email: true,
         userRoles: {
@@ -108,6 +120,9 @@ export class AuthService {
             },
           },
         },
+      },
+      orderBy: {
+        userId: 'desc',
       },
     });
 
@@ -121,6 +136,8 @@ export class AuthService {
         firstname: user.firstname,
         lastname: user.lastname,
         sexe: user.sexe,
+        id: user.userId,
+        username: user.username,
         email: user.email,
         roles: uniqueRoles,
       };
@@ -145,6 +162,8 @@ export class AuthService {
     return { data: 'User successfully deleted!' };
   }
   async updateUser(userId: number, updateDto: UpdateDto) {
+    console.log('id:', userId, 'datas:', updateDto);
+
     const user = await this.prismaService.user.findUnique({
       where: { userId },
     });
@@ -153,13 +172,20 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    const { password, ...updateData } = updateDto;
-
+    const { password, roleId, ...updateData } = updateDto;
+    console.log('id:', roleId, 'data', updateData);
     const updatedUser = await this.prismaService.user.update({
       where: { userId },
       data: updateData,
     });
 
-    return { message: 'User successfully updated!', user: updatedUser };
+    if (roleId) {
+      await this.prismaService.userRole.updateMany({
+        where: { userId },
+        data: { roleId },
+      });
+    }
+
+    return { message: 'User successfully updated!', data: updatedUser };
   }
 }

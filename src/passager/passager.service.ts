@@ -10,7 +10,7 @@ export class PassagerService {
     passagerId: number,
     updatePassagerDto: UpdatePassagerDto,
   ) {
-    const { nom, prenom, phone, destinationId } = updatePassagerDto;
+    const { nom, prenom, phone } = updatePassagerDto;
 
     const existPassager = await this.prismaService.engin.findUnique({
       where: { enginId: passagerId },
@@ -27,7 +27,6 @@ export class PassagerService {
           nom,
           prenom,
           phone,
-          destinationId,
         },
       });
       return { data: 'mise a jour effectuée avec succés' };
@@ -46,8 +45,8 @@ export class PassagerService {
         `Engin avec l'ID ${passager} n'a pas été trouvé.`,
       );
     }
-    await this.prismaService.syndicat.update({
-      where: { id: passagerId },
+    await this.prismaService.passager.update({
+      where: { passagerId },
       data: { isdeleted: true },
     });
 
@@ -56,31 +55,31 @@ export class PassagerService {
 
   async getAll() {
     return await this.prismaService.passager.findMany({
-      include: {
-        destination: {
-          include: {
-            gare: true,
-          },
-        },
-      },
+      where: { isdeleted: false },
     });
   }
 
   async creationPassager(createPassager: CreatePassagerDto) {
-    const { nom, prenom, phone, destinationId, isdeleted } = createPassager;
+    const { nom, prenom, phone } = createPassager;
     try {
-      await this.prismaService.passager.create({
+      const passager = await this.prismaService.passager.create({
         data: {
           nom,
           prenom,
           phone,
-          destinationId,
           isdeleted: false,
         },
       });
-      return { data: 'Insertion effectuée avec succès' };
+      return { data: 'Insertion effectuée avec succès', datas: passager };
     } catch (error) {
-      throw new Error("Erreur lors de l'insertion du passager");
+      console.error(
+        "Erreur lors de l'insertion du passager:",
+        error.message,
+        error,
+      );
+      throw new Error(
+        "Erreur lors de l'insertion du passager: " + error.message,
+      );
     }
   }
 }

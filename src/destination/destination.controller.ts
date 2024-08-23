@@ -14,7 +14,7 @@ import { CreateDestinationDto } from './dto/CreateDestinationDto';
 import { UpdateDestinationDto } from './dto/UpdateDestinationDto';
 import { AuthGuard } from '@nestjs/passport';
 
-@Controller('destination')
+@Controller('/walli/v1/destination')
 export class DestinationController {
   constructor(private readonly destinationService: DestinationService) {}
 

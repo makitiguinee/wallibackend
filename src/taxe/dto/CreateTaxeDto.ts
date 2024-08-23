@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsPositive,
   IsBoolean,
+  IsInt,
 } from 'class-validator';
 import { Periode } from '@prisma/client';
 
@@ -28,6 +29,6 @@ export class CreateTaxeDto {
   isdeleted?: boolean;
 
   @IsNotEmpty()
-  @IsString()
+  @IsInt()
   enginId: number;
 }

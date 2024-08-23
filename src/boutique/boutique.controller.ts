@@ -14,7 +14,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateBoutiqueDto } from './dto/createBoutiqueDto';
 import { updateBoutiqueDto } from './dto/updateBoutiqueDto';
 
-@Controller('boutique')
+@Controller('/walli/v1/boutique')
 export class BoutiqueController {
   constructor(private readonly boutiqueService: BoutiqueService) {}
 

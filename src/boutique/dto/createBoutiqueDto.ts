@@ -4,6 +4,7 @@ import {
   IsString,
   IsOptional,
   IsInt,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateBoutiqueDto {
@@ -32,7 +33,7 @@ export class CreateBoutiqueDto {
   existAgreement?: boolean;
 
   @IsNotEmpty()
-  @IsString()
+  @IsNumber()
   altitude: any;
 
   @IsNotEmpty()
@@ -40,11 +41,11 @@ export class CreateBoutiqueDto {
   isdeleted: boolean;
 
   @IsOptional()
-  @IsString()
+  @IsNumber()
   longitude?: any;
 
   @IsOptional()
-  @IsString()
+  @IsNumber()
   latitude?: any;
 
   @IsNotEmpty()

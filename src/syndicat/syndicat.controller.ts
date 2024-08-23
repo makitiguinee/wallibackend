@@ -14,7 +14,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateSyndicatDto } from './dto/CreateSyndicatDto';
 import { UpdateProprietaireDto } from 'src/client/dto/UpdateProprietaireDto';
 
-@Controller('syndicat')
+@Controller('walli/v1/syndicat')
 export class SyndicatController {
   constructor(private readonly syndicatService: SyndicatService) {}
 

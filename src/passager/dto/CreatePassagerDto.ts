@@ -22,10 +22,6 @@ export class CreatePassagerDto {
   phone: string;
 
   @IsNotEmpty()
-  @IsInt()
-  destinationId: any;
-
-  @IsNotEmpty()
   @IsBoolean()
   isdeleted: Boolean;
 }

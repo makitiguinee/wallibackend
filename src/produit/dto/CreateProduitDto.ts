@@ -1,36 +1,43 @@
 import { TypeProduit } from '@prisma/client';
-import { IsEmpty, IsInt, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmpty,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+} from 'class-validator';
 
 export class CreateProduitDto {
-  @IsEmpty()
+  @IsNotEmpty()
   @IsString()
   nomProduit: string;
 
-  @IsEmpty()
+  @IsNotEmpty()
   @IsString()
   photo: string;
 
-  @IsEmpty()
+  @IsNotEmpty()
   @IsString()
   description: string;
 
-  @IsEmpty()
-  @IsString()
+  @IsNotEmpty()
+  @IsBoolean()
   intereseted: boolean;
 
-  @IsEmpty()
-  @IsString()
+  @IsNotEmpty()
+  @IsBoolean()
   isdeleted: boolean;
 
-  @IsEmpty()
-  @IsInt()
+  @IsNotEmpty()
+  @IsNumber()
   prix: number;
 
-  @IsEmpty()
+  @IsNotEmpty()
   @IsString()
   type: TypeProduit;
 
-  @IsEmpty()
+  @IsNotEmpty()
   @IsInt()
   boutiqueId: number;
 }

@@ -45,7 +45,7 @@ enum TypeProduit {
   LOCATION
 }
 
-//endpoint implementer
+//endpoint implementer ok
 model User {
   userId        Int            @id @default(autoincrement())
   firstname     String         @db.VarChar(80)
@@ -63,7 +63,7 @@ model User {
   boutiques     Boutique[]
 }
 
-//endpoint implementer
+//endpoint implementer ok
 model Role {
   roleId          Int        @id @default(autoincrement())
   nameRole        String     @db.VarChar(80)
@@ -72,7 +72,7 @@ model Role {
   userRoles       UserRole[]
 }
 
-//endpoint implementer
+//endpoint implementer ok
 model UserRole {
   userRoleId Int  @id @default(autoincrement())
   userId     Int
@@ -83,7 +83,7 @@ model UserRole {
   @@unique([userId, roleId])
 }
 
-//endpoint implementer
+//endpoint implementer ok
 model Proprietaire {
   proprietaireId Int       @id @default(autoincrement())
   city           String    @db.VarChar(80)
@@ -100,7 +100,7 @@ model Proprietaire {
   updatedAt      DateTime  @updatedAt
 }
 
-//endpoint implementer
+//endpoint implementer ok
 model Engin {
   enginId            Int          @id @default(autoincrement())
   immatricule        String       @db.VarChar(80)
@@ -111,30 +111,27 @@ model Engin {
   numeroCarteVerte   String       @db.VarChar(80)
   existAssurance     Boolean
   dateEpireAssurance String
-
   existCarteGris     Boolean
   dateEpireCarteGris String
-
-  existVignette     Boolean
-  dateEpireVignette String
-  isdeleted         Boolean
+  existVignette      Boolean
+  dateEpireVignette  String
+  isdeleted          Boolean
 
   proprietaireId Int
   proprietaire   Proprietaire @relation(fields: [proprietaireId], references: [proprietaireId])
 
   enginTaxes EnginTaxe[]
 
-  destinationId Int
-  destination   Destination @relation(fields: [destinationId], references: [destinationId])
+  lineId Int?
+  line   Line? @relation(fields: [lineId], references: [id])
 
-  lineId Int
-  line   Line @relation(fields: [lineId], references: [id])
+  trajets Trajet[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-//endpoint implementer
+//endpoint implementer ok
 model Taxe {
   taxeId         Int         @id @default(autoincrement())
   montant        Float
@@ -146,7 +143,7 @@ model Taxe {
   updatedAt      DateTime    @updatedAt
 }
 
-//endpoint implementer
+//endpoint implementer ok
 model EnginTaxe {
   enginTaxeId  Int      @id @default(autoincrement())
   enginId      Int
@@ -160,7 +157,7 @@ model EnginTaxe {
   @@unique([enginId, taxeId])
 }
 
-//endpoint implementer
+//endpoint implementer ok
 model Boutique {
   boutiqueId     Int       @id @default(autoincrement())
   nomBoutique    String    @db.VarChar(80)
@@ -180,6 +177,7 @@ model Boutique {
   user           User      @relation(fields: [userId], references: [userId])
 }
 
+//endpoint implementer ok
 model Produit {
   produitId   Int         @id @default(autoincrement())
   nomProduit  String      @db.VarChar(80)
@@ -195,46 +193,48 @@ model Produit {
   boutique    Boutique    @relation(fields: [boutiqueId], references: [boutiqueId])
 }
 
-//endpoint implementer
+//endpoint implementer ok
 model Passager {
-  passagerId    Int         @id @default(autoincrement())
-  nom           String      @db.VarChar(80)
-  prenom        String      @db.VarChar(80)
-  phone         String      @unique @db.VarChar(80)
-  isdeleted     Boolean
-  destinationId Int
-  destination   Destination @relation(fields: [destinationId], references: [destinationId])
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  passagerId Int     @id @default(autoincrement())
+  nom        String  @db.VarChar(80)
+  prenom     String  @db.VarChar(80)
+  phone      String  @unique @db.VarChar(80)
+  isdeleted  Boolean
+
+  trajets   Trajet[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-//endpoint implementer
+//endpoint implementer ok
 model Gare {
-  gareId       Int           @id @default(autoincrement())
-  nom          String        @db.VarChar(80)
-  city         String        @db.VarChar(180)
-  longitude    String        @db.VarChar(180)
-  altitude     String        @db.VarChar(180)
-  isdeleted    Boolean
-  latitude     String        @db.VarChar(180)
+  gareId    Int     @id @default(autoincrement())
+  nom       String  @db.VarChar(80)
+  city      String  @db.VarChar(180)
+  longitude String  @db.VarChar(180)
+  altitude  String  @db.VarChar(180)
+  latitude  String  @db.VarChar(180)
+  isdeleted Boolean
+
   destinations Destination[]
+  trajets      Trajet[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
 
-//endpoint implementer
+//endpoint implementer ok
 model Destination {
-  destinationId    Int        @id @default(autoincrement())
-  villeDepart      String     @db.VarChar(80)
-  villeDestination String     @db.VarChar(80)
+  destinationId    Int      @id @default(autoincrement())
+  villeDepart      String   @db.VarChar(80)
+  villeDestination String   @db.VarChar(80)
+  prix             Float
   gareId           Int
   isdeleted        Boolean
-  gare             Gare       @relation(fields: [gareId], references: [gareId])
-  engins           Engin[]
-  passagers        Passager[]
+  gare             Gare     @relation(fields: [gareId], references: [gareId])
+  trajets          Trajet[]
 }
 
-//endpoint implementer
+//endpoint implementer ok
 model Syndicat {
   id          Int     @id @default(autoincrement())
   phone       String  @db.VarChar(80)
@@ -248,7 +248,7 @@ model Syndicat {
   user        User    @relation(fields: [userId], references: [userId])
 }
 
-//endpoint implementer
+//endpoint implementer ok
 model Line {
   id         Int      @id @default(autoincrement())
   nomline    String   @db.VarChar(80)
@@ -259,4 +259,21 @@ model Line {
   syndicatId Int
   syndicat   Syndicat @relation(fields: [syndicatId], references: [id])
   engins     Engin[]
+}
+
+model Trajet {
+  trajetId      Int     @id @default(autoincrement())
+  passagerId    Int
+  enginId       Int
+  destinationId Int
+  gareId        Int
+  isdeleted     Boolean
+
+  passager    Passager    @relation(fields: [passagerId], references: [passagerId])
+  engin       Engin       @relation(fields: [enginId], references: [enginId])
+  destination Destination @relation(fields: [destinationId], references: [destinationId])
+  gare        Gare        @relation(fields: [gareId], references: [gareId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

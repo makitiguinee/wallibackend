@@ -19,7 +19,6 @@ export class EnginService {
       existVignette,
       dateEpireVignette,
       isdeleted,
-      destinationId,
       lineId,
     } = updateEnginDto;
 
@@ -46,7 +45,6 @@ export class EnginService {
         existVignette,
         dateEpireVignette,
         isdeleted,
-        destinationId,
         lineId,
       },
     });
@@ -100,7 +98,6 @@ export class EnginService {
       existVignette,
       dateEpireVignette,
       proprietaireId,
-      destinationId,
       lineId,
     } = createEnginDto;
 
@@ -120,10 +117,7 @@ export class EnginService {
         isdeleted: false,
         dateEpireVignette,
         proprietaire: { connect: { proprietaireId: proprietaireId } },
-        destination: destinationId
-          ? { connect: { destinationId: destinationId } }
-          : undefined,
-        line: lineId ? { connect: { id: lineId } } : undefined,
+        line: lineId ? { connect: { id: lineId } } : null,
       },
     });
   }

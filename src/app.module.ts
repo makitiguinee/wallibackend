@@ -14,6 +14,7 @@ import { PassagerModule } from './passager/passager.module';
 import { DestinationModule } from './destination/destination.module';
 import { BoutiqueModule } from './boutique/boutique.module';
 import { ProduitModule } from './produit/produit.module';
+import { TrajetModule } from './trajet/trajet.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ProduitModule } from './produit/produit.module';
     DestinationModule,
     BoutiqueModule,
     ProduitModule,
+    TrajetModule,
   ],
   controllers: [RoleController],
 })

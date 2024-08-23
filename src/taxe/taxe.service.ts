@@ -43,8 +43,8 @@ export class TaxeService {
       );
     }
 
-    await this.prismaService.syndicat.update({
-      where: { id: taxeId },
+    await this.prismaService.taxe.update({
+      where: { taxeId },
       data: { isdeleted: true },
     });
 
@@ -52,7 +52,8 @@ export class TaxeService {
   }
 
   async getAll() {
-    const taxes = await this.prismaService.taxe.findMany({
+    return await this.prismaService.taxe.findMany({
+      where: { isdeleted: false },
       include: {
         enginTaxes: {
           include: {
@@ -64,7 +65,6 @@ export class TaxeService {
                   },
                 },
                 line: true,
-                destination: true,
               },
             },
           },

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateSyndicatDto {
   @IsNotEmpty()
@@ -22,10 +22,10 @@ export class CreateSyndicatDto {
   quartier: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsInt()
   userId: number;
 
   @IsNotEmpty()
-  @IsString()
+  @IsBoolean()
   isdeleted: boolean;
 }

@@ -65,7 +65,7 @@ export class DestinationService {
   }
 
   async createDestionatio(createDestinationDto: CreateDestinationDto) {
-    const { villeDepart, villeDestination, gareId, isdeleted } =
+    const { villeDepart, villeDestination, gareId, prix } =
       createDestinationDto;
     try {
       await this.prismaService.destination.create({
@@ -73,6 +73,7 @@ export class DestinationService {
           villeDepart,
           villeDestination,
           gareId,
+          prix,
           isdeleted: false,
         },
       });

@@ -14,7 +14,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateEnginDto } from './dto/CreateEnginDto';
 import { UpdateEnginDto } from './dto/UpdateEnginDto';
 
-@Controller('engin')
+@Controller('/walli/v1/engin')
 export class EnginController {
   constructor(private readonly enginService: EnginService) {}
 

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsBoolean } from 'class-validator';
 
 export class CreateLineDto {
   @IsNotEmpty()
@@ -22,6 +22,6 @@ export class CreateLineDto {
   syndicatId: number;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsBoolean()
   isdeleted: boolean;
 }

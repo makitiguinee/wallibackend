@@ -13,7 +13,7 @@ import { GareService } from './gare.service';
 import { UpdateGareDto } from './dto/UpdateGareDto';
 import { AuthGuard } from '@nestjs/passport';
 
-@Controller('gare')
+@Controller('/walli/v1/gare')
 export class GareController {
   constructor(private readonly gareService: GareService) {}
 
@@ -37,11 +37,6 @@ export class GareController {
   async getAllGares() {
     return this.gareService.getAllGares();
   }
-
-  //   @Get(':id')
-  //   async getGareById(@Param('id') gareId: number) {
-  //     return this.gareService.getGareById(gareId);
-  //   }
 
   @UseGuards(AuthGuard('jwt'))
   @Put('delete/:id')

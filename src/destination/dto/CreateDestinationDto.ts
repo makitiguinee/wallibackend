@@ -1,4 +1,11 @@
-import { IsBoolean, IsInt, IsString, Length } from 'class-validator';
+import {
+  IsBoolean,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  Length,
+} from 'class-validator';
 
 export class CreateDestinationDto {
   @IsString()
@@ -14,4 +21,7 @@ export class CreateDestinationDto {
 
   @IsBoolean()
   isdeleted: Boolean;
+  @IsNotEmpty()
+  @IsNumber()
+  prix: number;
 }

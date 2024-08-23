@@ -14,7 +14,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateTaxeDto } from './dto/CreateTaxeDto';
 import { UpdateTaxeDto } from './dto/UpdateTaxeDto';
 
-@Controller('taxe')
+@Controller('/walli/v1/taxe')
 export class TaxeController {
   constructor(private readonly taxeService: TaxeService) {}
 

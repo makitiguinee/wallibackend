@@ -18,12 +18,7 @@ export class UpdatePassagerDto {
 
   @IsOptional()
   @IsString()
-  @MaxLength(80)
   phone?: string;
-
-  @IsOptional()
-  @IsInt()
-  destinationId?: number;
 
   @IsOptional()
   @IsBoolean()

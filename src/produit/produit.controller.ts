@@ -14,7 +14,7 @@ import { CreateProduitDto } from './dto/CreateProduitDto';
 import { ProduitService } from './produit.service';
 import { UpdateProduitDto } from './dto/UpdateProduitDto';
 
-@Controller('produit')
+@Controller('/walli/v1/produit')
 export class ProduitController {
   constructor(private readonly produitService: ProduitService) {}
 

@@ -24,30 +24,41 @@ export class GareService {
 
   async updateGare(gareId: number, updateGareDto: UpdateGareDto) {
     const { nom, city, longitude, altitude, latitude } = updateGareDto;
-    const existingGare = await this.prismaService.gare.findUnique({
-      where: { gareId },
-    });
 
-    if (!existingGare) {
-      throw new NotFoundException(
-        `Gare avec l'ID ${gareId} n'a pas été trouvée.`,
-      );
+    // Assurez-vous que gareId est bien un entier
+    const gareIdInt =
+      typeof gareId === 'string' ? parseInt(gareId, 10) : gareId;
+
+    try {
+      const existingGare = await this.prismaService.gare.findUnique({
+        where: { gareId: gareIdInt },
+      });
+
+      if (!existingGare) {
+        throw new NotFoundException(
+          `Gare avec l'ID ${gareIdInt} n'a pas été trouvée.`,
+        );
+      }
+
+      return this.prismaService.gare.update({
+        where: { gareId: gareIdInt },
+        data: {
+          nom,
+          city,
+          longitude,
+          altitude,
+          latitude,
+        },
+      });
+    } catch (error) {
+      throw new Error('Erreur lors de la mise à jour de la gare');
     }
-
-    return this.prismaService.gare.update({
-      where: { gareId },
-      data: {
-        nom,
-        city,
-        longitude,
-        altitude,
-        latitude,
-      },
-    });
   }
 
   async getAllGares() {
-    return this.prismaService.gare.findMany();
+    return this.prismaService.gare.findMany({
+      where: { isdeleted: false },
+    });
   }
 
   async getGareById(gareId: number) {
@@ -65,21 +76,25 @@ export class GareService {
   }
 
   async deleteGare(gareId: number) {
+    // Convertir gareId en entier si nécessaire
+    const gareIdInt =
+      typeof gareId === 'string' ? parseInt(gareId, 10) : gareId;
+
     const gare = await this.prismaService.gare.findUnique({
-      where: { gareId },
+      where: { gareId: gareIdInt },
     });
 
     if (!gare) {
       throw new NotFoundException(
-        `Gare avec l'ID ${gareId} n'a pas été trouvée.`,
+        `Gare avec l'ID ${gareIdInt} n'a pas été trouvée.`,
       );
     }
 
     await this.prismaService.gare.update({
-      where: { gareId },
+      where: { gareId: gareIdInt },
       data: { isdeleted: true },
     });
 
-    return { message: `Syndicat avec l'ID ${gareId} a été supprimé.` };
+    return { message: `Gare avec l'ID ${gareIdInt} a été supprimée.` };
   }
 }

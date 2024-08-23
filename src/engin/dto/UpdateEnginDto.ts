@@ -61,13 +61,9 @@ export class UpdateEnginDto {
 
   @IsOptional()
   @IsNumber()
-  destinationId?: number;
-
-  @IsOptional()
-  @IsNumber()
   lineId?: number;
 
   @IsOptional()
-  @IsNumber()
+  @IsBoolean()
   isdeleted?: boolean;
 }

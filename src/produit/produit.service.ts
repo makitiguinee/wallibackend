@@ -45,6 +45,7 @@ export class ProduitService {
           type,
         },
       });
+      return { data: 'la mise a jour effectuée avec succée' };
     } catch (error) {}
   }
 
@@ -73,6 +74,7 @@ export class ProduitService {
   async getAll() {
     try {
       return await this.prismaService.produit.findMany({
+        where: { isdeleted: false },
         include: {
           boutique: true,
         },
@@ -88,7 +90,7 @@ export class ProduitService {
       createProduitDto;
 
     try {
-      await this.prismaService.produit.create({
+      const produit = await this.prismaService.produit.create({
         data: {
           nomProduit,
           photo,
@@ -100,6 +102,10 @@ export class ProduitService {
           type,
         },
       });
-    } catch (error) {}
+      return { data: produit };
+    } catch (error) {
+      console.error('Error creating produit:', error);
+      throw new Error('Failed to create produit');
+    }
   }
 }

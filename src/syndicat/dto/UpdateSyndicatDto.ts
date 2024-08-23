@@ -1,5 +1,5 @@
 import { Boutique } from '@prisma/client';
-import { IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class UpdateSyndicatDto {
   @IsOptional()
@@ -23,10 +23,10 @@ export class UpdateSyndicatDto {
   quartier?: string;
 
   @IsOptional()
-  @IsString()
+  @IsInt()
   userId?: number;
 
   @IsOptional()
-  @IsString()
+  @IsBoolean()
   isdeleted?: Boolean;
 }

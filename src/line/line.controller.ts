@@ -14,7 +14,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateLineDto } from './dto/CreateLineDto';
 import { UpdateLineDto } from './dto/UpdateLineDto';
 
-@Controller('line')
+@Controller('/walli/v1/line')
 export class LineController {
   constructor(private readonly lineService: LineService) {}
 

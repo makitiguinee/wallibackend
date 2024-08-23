@@ -72,6 +72,15 @@ export class BoutiqueService {
           longitude: true,
           ville: true,
           quartier: true,
+          user: {
+            select: {
+              firstname: true,
+              lastname: true,
+              username: true,
+              email: true,
+              sexe: true,
+            },
+          },
         },
       });
       return { data: boutiques };
@@ -96,7 +105,7 @@ export class BoutiqueService {
     } = createBoutiqueDto;
 
     try {
-      await this.prismaService.boutique.create({
+      const boutique = await this.prismaService.boutique.create({
         data: {
           nomBoutique,
           pays,
@@ -111,7 +120,7 @@ export class BoutiqueService {
           latitude,
         },
       });
-      return { data: 'Insertion effectuée avec succès' };
+      return { data: 'Insertion effectuée avec succès', datas: boutique };
     } catch (error) {
       throw new Error(error);
     }

@@ -5,6 +5,7 @@ import {
   IsEnum,
   IsNumber,
   IsOptional,
+  IsInt,
 } from 'class-validator';
 import { TypeActivity } from '@prisma/client'; // Assurez-vous que cela correspond à l'énumération dans Prisma
 
@@ -62,12 +63,8 @@ export class CreateEnginDto {
   proprietaireId: number;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsBoolean()
   isdeleted: boolean;
-
-  @IsOptional()
-  @IsNumber()
-  destinationId?: number;
 
   @IsOptional()
   @IsNumber()

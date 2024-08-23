@@ -49,4 +49,10 @@ export class ClientController {
   ) {
     return this.clientService.updateclient(proprieteId, updateClientDto);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('findById/:id')
+  findById(@Param('id', ParseIntPipe) proprieteId: number) {
+    return this.clientService.findById(proprieteId);
+  }
 }

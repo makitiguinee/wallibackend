@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsNumber } from 'class-validator';
+import { IsOptional, IsString, IsNumber, IsBoolean } from 'class-validator';
 
 export class UpdateLineDto {
   @IsOptional()
@@ -22,6 +22,6 @@ export class UpdateLineDto {
   syndicatId?: number;
 
   @IsOptional()
-  @IsNumber()
+  @IsBoolean()
   isdeleted?: boolean;
 }

@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
@@ -47,5 +49,22 @@ export class PassagerController {
     @Req() request: Request,
   ) {
     return this.passagerService.updatePassager(passagerId, updatePassagerDto);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('getById/:id')
+  async getByIdPassager(
+    @Param('id', ParseIntPipe) passagerId: number,
+    @Req() request: Request,
+  ) {
+    try {
+      const result = await this.passagerService.getByIdPassager(passagerId);
+      return result;
+    } catch (error) {
+      throw new HttpException(
+        `Erreur lors de la récupération du passager: ${error.message}`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 }

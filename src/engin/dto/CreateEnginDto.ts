@@ -62,10 +62,6 @@ export class CreateEnginDto {
   @IsNumber()
   proprietaireId: number;
 
-  @IsNotEmpty()
-  @IsBoolean()
-  isdeleted: boolean;
-
   @IsOptional()
   @IsNumber()
   lineId?: number;

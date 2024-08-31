@@ -12,7 +12,7 @@ export class UpdateSyndicatDto {
 
   @IsOptional()
   @IsString()
-  pays?: string;
+  nationality?: string;
 
   @IsOptional()
   @IsString()

@@ -35,8 +35,10 @@ export class DestinationService {
           isdeleted: false,
         },
         select: {
+          destinationId: true,
           villeDepart: true,
           villeDestination: true,
+          prix: true,
           gare: {
             select: {
               nom: true,
@@ -78,6 +80,30 @@ export class DestinationService {
         },
       });
       return { data: 'insertion effectuée avec succée' };
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getByIdDestination(destinationId: number) {
+    try {
+      return await this.prismaService.destination.findUnique({
+        where: {
+          destinationId: destinationId,
+        },
+        select: {
+          destinationId: true,
+          villeDepart: true,
+          villeDestination: true,
+          prix: true,
+          gare: {
+            select: {
+              nom: true,
+              gareId: true,
+            },
+          },
+        },
+      });
     } catch (error) {
       throw new Error(error);
     }

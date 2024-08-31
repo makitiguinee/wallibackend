@@ -19,8 +19,6 @@ export class CreateDestinationDto {
   @IsInt()
   gareId: number;
 
-  @IsBoolean()
-  isdeleted: Boolean;
   @IsNotEmpty()
   @IsNumber()
   prix: number;

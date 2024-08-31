@@ -7,6 +7,14 @@ export class CreateLineDto {
 
   @IsNotEmpty()
   @IsString()
+  ville: string;
+
+  @IsNotEmpty()
+  @IsString()
+  quartier: string;
+
+  @IsNotEmpty()
+  @IsString()
   longitude: string;
 
   @IsNotEmpty()
@@ -20,8 +28,4 @@ export class CreateLineDto {
   @IsNotEmpty()
   @IsNumber()
   syndicatId: number;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  isdeleted: boolean;
 }

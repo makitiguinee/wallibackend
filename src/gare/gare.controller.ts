@@ -3,7 +3,9 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   UseGuards,
@@ -42,5 +44,16 @@ export class GareController {
   @Put('delete/:id')
   async deleteGare(@Param('id') gareId: number) {
     return this.gareService.deleteGare(gareId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('getGareById/:id')
+  async getGareById(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const gare = await this.gareService.getGareById(id);
+      return gare;
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 }

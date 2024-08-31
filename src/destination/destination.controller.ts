@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Post,
@@ -50,5 +51,22 @@ export class DestinationController {
       destinationId,
       updateDestinationDto,
     );
+  }
+  @UseGuards(AuthGuard('jwt'))
+  @Get('findById/:id')
+  async getById(@Param('id') id: string) {
+    const destinationId = parseInt(id, 10);
+    if (isNaN(destinationId)) {
+      throw new NotFoundException(`ID invalide: ${id}`);
+    }
+    const destination =
+      await this.destinationService.getByIdDestination(destinationId);
+    if (!destination) {
+      throw new NotFoundException(
+        `Destination avec l'ID ${destinationId} non trouvée`,
+      );
+    }
+
+    return destination;
   }
 }

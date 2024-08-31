@@ -14,6 +14,7 @@ export class EnginService {
       numeroCarteVerte,
       existAssurance,
       dateEpireAssurance,
+      typeActivity,
       existCarteGris,
       dateEpireCarteGris,
       existVignette,
@@ -38,6 +39,7 @@ export class EnginService {
         model,
         dateService,
         numeroCarteVerte,
+        typeActivity,
         existAssurance,
         dateEpireAssurance,
         existCarteGris,
@@ -62,8 +64,8 @@ export class EnginService {
         `Engin avec l'ID ${enginId} n'a pas été trouvé.`,
       );
     }
-    await this.prismaService.syndicat.update({
-      where: { id: enginId },
+    await this.prismaService.engin.update({
+      where: { enginId },
       data: { isdeleted: true },
     });
 
@@ -120,5 +122,41 @@ export class EnginService {
         line: lineId ? { connect: { id: lineId } } : null,
       },
     });
+  }
+
+  async findById(enginId: number) {
+    const engin = await this.prismaService.engin.findUnique({
+      where: {
+        enginId,
+        isdeleted: false,
+      },
+      select: {
+        immatricule: true,
+        marque: true,
+        model: true,
+        typeActivity: true,
+        dateService: true,
+        numeroCarteVerte: true,
+        existAssurance: true,
+        dateEpireAssurance: true,
+        existCarteGris: true,
+        dateEpireCarteGris: true,
+        existVignette: true,
+        dateEpireVignette: true,
+        proprietaireId: true,
+        lineId: true,
+        proprietaire: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+
+    if (!engin) {
+      throw new NotFoundException(`Client with ID ${enginId} not found`);
+    }
+
+    return engin;
   }
 }

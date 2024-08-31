@@ -5,6 +5,7 @@ import {
   IsOptional,
   IsInt,
   IsNumber,
+  IsEmpty,
 } from 'class-validator';
 
 export class CreateBoutiqueDto {
@@ -36,9 +37,9 @@ export class CreateBoutiqueDto {
   @IsNumber()
   altitude: any;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsBoolean()
-  isdeleted: boolean;
+  isdeleted?: boolean;
 
   @IsOptional()
   @IsNumber()

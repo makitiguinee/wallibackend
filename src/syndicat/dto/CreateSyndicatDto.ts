@@ -11,7 +11,7 @@ export class CreateSyndicatDto {
 
   @IsNotEmpty()
   @IsString()
-  pays: string;
+  nationality: string;
 
   @IsNotEmpty()
   @IsString()
@@ -24,8 +24,4 @@ export class CreateSyndicatDto {
   @IsNotEmpty()
   @IsInt()
   userId: number;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  isdeleted: boolean;
 }

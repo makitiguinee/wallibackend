@@ -11,14 +11,15 @@ export class SyndicatService {
     syndicatId: number,
     updateSyndicatDto: UpdateSyndicatDto,
   ) {
-    const { phone, dateOfBirth, pays, ville, quartier } = updateSyndicatDto;
+    const { phone, dateOfBirth, ville, quartier, nationality } =
+      updateSyndicatDto;
 
     const updatedSyndicat = await this.prismaService.syndicat.update({
       where: { id: syndicatId },
       data: {
         phone,
         dateOfBirth,
-        pays,
+        nationality,
         ville,
         quartier,
       },
@@ -52,9 +53,10 @@ export class SyndicatService {
     const syndicats = await this.prismaService.syndicat.findMany({
       where: { isdeleted: false },
       select: {
+        id: true,
         phone: true,
         dateOfBirth: true,
-        pays: true,
+        nationality: true,
         ville: true,
         quartier: true,
         user: {
@@ -115,20 +117,51 @@ export class SyndicatService {
   }
 
   async creationSyndicat(createSyndicatDto: CreateSyndicatDto) {
-    const { phone, dateOfBirth, pays, ville, quartier, userId } =
+    const { phone, dateOfBirth, nationality, ville, quartier, userId } =
       createSyndicatDto;
 
     const syndicat = await this.prismaService.syndicat.create({
       data: {
         phone,
         dateOfBirth,
-        pays,
+        nationality,
         ville,
         quartier,
         isdeleted: false,
         userId,
       },
     });
+
+    return syndicat;
+  }
+
+  async findById(id: number) {
+    const syndicat = await this.prismaService.syndicat.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        ville: true,
+        phone: true,
+        nationality: true,
+        dateOfBirth: true,
+        quartier: true,
+        userId: true,
+        user: {
+          select: {
+            userId: true,
+            firstname: true,
+            lastname: true,
+            username: true,
+            email: true,
+            sexe: true,
+          },
+        },
+      },
+    });
+
+    if (!syndicat) {
+      throw new NotFoundException(`syndicat with ID ${id} not found`);
+    }
 
     return syndicat;
   }

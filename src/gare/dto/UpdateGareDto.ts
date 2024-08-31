@@ -12,6 +12,9 @@ export class UpdateGareDto {
   city?: string;
 
   @IsOptional()
+  syndicatId?: number;
+
+  @IsOptional()
   @IsString()
   @MaxLength(180)
   longitude?: string;

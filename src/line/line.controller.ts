@@ -48,4 +48,13 @@ export class LineController {
   ) {
     return this.lineService.updateLine(proprieteId, updateLineDto);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('getLineById/:id')
+  getLineById(
+    @Param('id', ParseIntPipe) proprieteId: number,
+    @Req() request: Request,
+  ) {
+    return this.lineService.getLineById(proprieteId);
+  }
 }

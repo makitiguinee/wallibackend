@@ -48,4 +48,10 @@ export class EnginController {
   ) {
     return this.enginService.updateEngin(enginId, updateEnginDto);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('findById/:id')
+  findById(@Param('id', ParseIntPipe) enginId: number) {
+    return this.enginService.findById(enginId);
+  }
 }

@@ -8,11 +8,12 @@ export class GareService {
   constructor(private prismaService: PrismaService) {}
 
   async createGare(createGareDto: CreateGareDto) {
-    const { nom, city, longitude, altitude, latitude, isdeleted } =
+    const { nom, city, longitude, altitude, latitude, syndicatId } =
       createGareDto;
     return this.prismaService.gare.create({
       data: {
         nom,
+        syndicatId,
         city,
         longitude,
         altitude,
@@ -63,12 +64,42 @@ export class GareService {
 
   async getGareById(gareId: number) {
     const gare = await this.prismaService.gare.findUnique({
-      where: { gareId },
+      where: {
+        gareId,
+      },
+      select: {
+        gareId: true,
+        nom: true,
+        city: true,
+        longitude: true,
+        altitude: true,
+        latitude: true,
+        isdeleted: true,
+        syndicatId: true,
+        syndicat: {
+          include: {
+            user: true,
+          },
+        },
+        destinations: {
+          select: {
+            destinationId: true,
+            villeDepart: true,
+            villeDestination: true,
+            prix: true,
+          },
+        },
+        trajets: {
+          select: {
+            trajetId: true,
+          },
+        },
+      },
     });
 
-    if (!gare) {
+    if (!gare || gare.isdeleted) {
       throw new NotFoundException(
-        `Gare avec l'ID ${gareId} n'a pas été trouvée.`,
+        `Gare with ID ${gareId} not found or is deleted`,
       );
     }
 

@@ -48,4 +48,10 @@ export class SyndicatController {
   ) {
     return this.syndicatService.updateSyndicat(proprieteId, updateSyndicat);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('findById/:id')
+  findById(@Param('id', ParseIntPipe) proprieteId: number) {
+    return this.syndicatService.findById(proprieteId);
+  }
 }

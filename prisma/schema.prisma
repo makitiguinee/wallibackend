@@ -45,7 +45,13 @@ enum TypeProduit {
   LOCATION
 }
 
-//endpoint implementer ok
+enum StatusPassager {
+  ANNULER
+  AFFECTER
+  ATTENTE
+}
+
+//endpoint implementer ok implementation frontend ok
 model User {
   userId        Int            @id @default(autoincrement())
   firstname     String         @db.VarChar(80)
@@ -83,7 +89,7 @@ model UserRole {
   @@unique([userId, roleId])
 }
 
-//endpoint implementer ok
+//endpoint implementer ok implementation frontend ok
 model Proprietaire {
   proprietaireId Int       @id @default(autoincrement())
   city           String    @db.VarChar(80)
@@ -100,7 +106,7 @@ model Proprietaire {
   updatedAt      DateTime  @updatedAt
 }
 
-//endpoint implementer ok
+//endpoint implementer ok implementation frontend ok
 model Engin {
   enginId            Int          @id @default(autoincrement())
   immatricule        String       @db.VarChar(80)
@@ -143,7 +149,7 @@ model Taxe {
   updatedAt      DateTime    @updatedAt
 }
 
-//endpoint implementer ok
+//endpoint implementer ok implementation frontend ok
 model EnginTaxe {
   enginTaxeId  Int      @id @default(autoincrement())
   enginId      Int
@@ -195,31 +201,39 @@ model Produit {
 
 //endpoint implementer ok
 model Passager {
-  passagerId Int     @id @default(autoincrement())
-  nom        String  @db.VarChar(80)
-  prenom     String  @db.VarChar(80)
-  phone      String  @unique @db.VarChar(80)
-  isdeleted  Boolean
+  passagerId       Int            @id @default(autoincrement())
+  nom              String         @db.VarChar(80)
+  prenom           String         @db.VarChar(80)
+  villeDepart      String         @db.VarChar(80)
+  villeDestination String         @db.VarChar(80)
+  phone            String         @unique @db.VarChar(80)
+  status           StatusPassager
+  gareId           Int
+  gare             Gare           @relation(fields: [gareId], references: [gareId])
+  isdeleted        Boolean
 
   trajets   Trajet[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-//endpoint implementer ok
+//endpoint implementer ok implementation frontend ok
 model Gare {
-  gareId    Int     @id @default(autoincrement())
-  nom       String  @db.VarChar(80)
-  city      String  @db.VarChar(180)
-  longitude String  @db.VarChar(180)
-  altitude  String  @db.VarChar(180)
-  latitude  String  @db.VarChar(180)
-  isdeleted Boolean
-
+  gareId       Int           @id @default(autoincrement())
+  nom          String        @db.VarChar(80)
+  city         String        @db.VarChar(180)
+  longitude    String        @db.VarChar(180)
+  altitude     String        @db.VarChar(180)
+  latitude     String        @db.VarChar(180)
+  isdeleted    Boolean
   destinations Destination[]
   trajets      Trajet[]
+  passager     Passager[]
+  syndicatId   Int
+  syndicat     Syndicat      @relation(fields: [syndicatId], references: [id])
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+  Syndicat     Syndicat[]    @relation("GareSyndicat")
 }
 
 //endpoint implementer ok
@@ -234,24 +248,29 @@ model Destination {
   trajets          Trajet[]
 }
 
-//endpoint implementer ok
+//endpoint implementer ok implementation frontend ok
 model Syndicat {
   id          Int     @id @default(autoincrement())
   phone       String  @db.VarChar(80)
   dateOfBirth String  @db.VarChar(80)
-  pays        String  @db.VarChar(80)
+  nationality String  @db.VarChar(80)
   ville       String  @db.VarChar(80)
   quartier    String  @db.VarChar(80)
   lines       Line[]
   userId      Int
   isdeleted   Boolean
   user        User    @relation(fields: [userId], references: [userId])
+  gares       Gare[]  @relation("GareSyndicat")
+
+  Gare Gare[]
 }
 
-//endpoint implementer ok
+//endpoint implementer ok implementation frontend ok
 model Line {
   id         Int      @id @default(autoincrement())
   nomline    String   @db.VarChar(80)
+  ville      String   @db.VarChar(80)
+  quartier   String   @db.VarChar(80)
   longitude  String   @db.VarChar(180)
   altitude   String   @db.VarChar(180)
   latitude   String   @db.VarChar(180)

@@ -4,6 +4,7 @@ import {
   MaxLength,
   isBoolean,
   IsBoolean,
+  IsNumber,
 } from 'class-validator';
 
 export class CreateGareDto {
@@ -23,6 +24,10 @@ export class CreateGareDto {
   longitude: string;
 
   @IsNotEmpty()
+  @IsNumber()
+  syndicatId: number;
+
+  @IsNotEmpty()
   @IsString()
   @MaxLength(180)
   altitude: string;
@@ -31,7 +36,4 @@ export class CreateGareDto {
   @IsString()
   @MaxLength(180)
   latitude: string;
-
-  @IsBoolean()
-  isdeleted: Boolean;
 }

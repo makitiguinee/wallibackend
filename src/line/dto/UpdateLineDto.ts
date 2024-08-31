@@ -18,6 +18,10 @@ export class UpdateLineDto {
   latitude?: string;
 
   @IsOptional()
+  @IsString()
+  nationality?: string;
+
+  @IsOptional()
   @IsNumber()
   syndicatId?: number;
 

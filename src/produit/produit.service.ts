@@ -24,7 +24,7 @@ export class ProduitService {
     try {
       await this.prismaService.produit.update({
         where: { produitId },
-        data: { intereseted: true },
+        data: { interessed: true },
       });
       return { data: 'produit commander avec succés' };
     } catch (error) {
@@ -63,7 +63,7 @@ export class ProduitService {
     try {
       await this.prismaService.produit.update({
         where: { produitId },
-        data: { isdeleted: true },
+        data: { isDeleted: true },
       });
       return { data: 'suppression effectuée avec succée' };
     } catch (error) {
@@ -74,7 +74,7 @@ export class ProduitService {
   async getAll() {
     try {
       return await this.prismaService.produit.findMany({
-        where: { isdeleted: false },
+        where: { isDeleted: false },
         include: {
           boutique: true,
         },
@@ -95,8 +95,8 @@ export class ProduitService {
           nomProduit,
           photo,
           description,
-          intereseted: false,
-          isdeleted: false,
+          interessed: false,
+          isDeleted: false,
           boutiqueId,
           prix,
           type,

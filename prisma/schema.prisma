@@ -189,14 +189,15 @@ model Produit {
   nomProduit  String      @db.VarChar(80)
   photo       String      @db.VarChar(255)
   description String      @db.VarChar(255)
-  intereseted Boolean
-  isdeleted   Boolean
+  interessed  Boolean
+  isDeleted   Boolean
   prix        Float
   type        TypeProduit
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   boutiqueId  Int
   boutique    Boutique    @relation(fields: [boutiqueId], references: [boutiqueId])
+  images      Image[]
 }
 
 //endpoint implementer ok
@@ -295,4 +296,12 @@ model Trajet {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Image {
+  imageId   Int     @id @default(autoincrement())
+  url       String  @db.VarChar(255)
+  nom       String  @db.VarChar(180)
+  produit   Produit @relation(fields: [produitId], references: [produitId])
+  produitId Int
 }

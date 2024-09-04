@@ -15,6 +15,7 @@ import { DestinationModule } from './destination/destination.module';
 import { BoutiqueModule } from './boutique/boutique.module';
 import { ProduitModule } from './produit/produit.module';
 import { TrajetModule } from './trajet/trajet.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { TrajetModule } from './trajet/trajet.module';
     BoutiqueModule,
     ProduitModule,
     TrajetModule,
+    UploadModule,
   ],
   controllers: [RoleController],
 })

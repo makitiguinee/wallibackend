@@ -52,25 +52,49 @@ export class TaxeService {
   }
 
   async getAll() {
-    return await this.prismaService.taxe.findMany({
-      where: { isdeleted: false },
-      include: {
-        enginTaxes: {
-          include: {
-            engin: {
-              include: {
-                proprietaire: {
-                  include: {
-                    user: true,
+    try {
+      const result = await this.prismaService.taxe.findMany({
+        where: { isdeleted: false },
+        select: {
+          taxeId: true,
+          montant: true,
+          periode: true,
+          statutPaiement: true,
+          enginTaxes: {
+            include: {
+              engin: {
+                include: {
+                  proprietaire: {
+                    include: {
+                      user: {
+                        select: {
+                          userId: true,
+                          firstname: true,
+                          lastname: true,
+                          username: true,
+                          email: true,
+                        },
+                      },
+                    },
+                  },
+                  line: {
+                    select: {
+                      id: true,
+                      nomline: true,
+                    },
                   },
                 },
-                line: true,
               },
             },
           },
         },
-      },
-    });
+      });
+
+      return result;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des taxes:', error);
+      return null;
+    }
   }
 
   async creationTaxe(createTaxeDto: CreateTaxeDto) {
